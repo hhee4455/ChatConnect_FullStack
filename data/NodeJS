@@ -1,0 +1,6 @@
+Do you need to get all files present in the directory or you want to scan a directory for files using node.js, then you’re on the correct web page because in this Nodejs How to Tutorial, we will learning How to get the list of all files in a directory in Node.js.
+
+We will be using Node.js fs core module to get all files in the directory, we can use following fsmethods.
+
+fs.readdir(path, callbackFunction) — This method will read all files in the directory.You need to pass directory path as the first argument and in the second argument, you can any callback function.
+path.join() — This method of node.js path module, we will be using to get the path of the directory and This will join all given path segments together.
