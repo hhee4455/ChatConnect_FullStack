@@ -57,6 +57,27 @@ function Article(props) {
   );
 }
 
+function Create() {
+  //create 컴포넌트 만들기
+  return (
+    <article>
+      <h2>Create</h2>
+      <form>
+        {/*form 태그 어떤 정보를 서버로 전송할때 */}
+        <p>
+          <input type="text" name="title" placeholder="title" />
+        </p>
+        <p>
+          <textarea type="body" placeholder="body" />
+        </p>
+        <p>
+          <input type="submit" value="Create" /> {/*전송버튼*/}
+        </p>
+      </form>
+    </article>
+  );
+}
+
 function App() {
   // const _mode = useState("WELCOME");   //state 부분
   // const mode = _mode[0];
@@ -82,6 +103,8 @@ function App() {
       }
     }
     content = <Article title={title} body={body}></Article>;
+  } else if (mode === "CREATE") {
+    content = <Create></Create>;
   }
   return (
     <div>
@@ -100,6 +123,16 @@ function App() {
         }}
       ></Nav>
       {content}
+      <a
+        href="/create"
+        onClick={(event) => {
+          //Create 생성
+          event.preventDefault(); //a태그의 기본적인 동작을 못하게 하기 위해서
+          setMode("CREATE"); //App 다시 동작
+        }}
+      >
+        Create
+      </a>
     </div>
   );
 }
