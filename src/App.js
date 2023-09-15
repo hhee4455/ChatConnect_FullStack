@@ -57,18 +57,27 @@ function Article(props) {
   );
 }
 
-function Create() {
+function Create(props) {
   //create 컴포넌트 만들기
   return (
     <article>
       <h2>Create</h2>
-      <form>
-        {/*form 태그 어떤 정보를 서버로 전송할때 */}
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const title = event.target.title.value;
+          const body = event.target.body.value;
+          props.onCreate(title, body);
+          // event.target = form이다.
+        }}
+      >
+        {/*form 태그 어떤 정보를 서버로 전송할때 쓴다. 
+          onSubmit  submit 버튼을 눌렀을 때 폼 태그에서 발생하는 이벤트*/}
         <p>
           <input type="text" name="title" placeholder="title" />
         </p>
         <p>
-          <textarea type="body" placeholder="body" />
+          <textarea name="body" placeholder="body" />
         </p>
         <p>
           <input type="submit" value="Create" /> {/*전송버튼*/}
@@ -83,12 +92,13 @@ function App() {
   // const mode = _mode[0];
   // const setMode = _mode[1];
   const [mode, setMode] = useState("Welcome"); // 위 세줄 요약한거
-  const [id, setid] = useState(null);
-  const topics = [
+  const [id, setId] = useState(null);
+  const [nextId, setNextId] = useState(4);
+  const [topics, setTopics] = useState([
     { id: 1, title: "html", body: "html is ... " },
     { id: 2, title: "css", body: "css is ... " },
     { id: 3, title: "javascript", body: "javascript is ... " },
-  ];
+  ]);
   let content = null;
   if (mode === "WELCOME") {
     content = <Article title="Welcom" body="Hello, WEB"></Article>;
@@ -104,7 +114,19 @@ function App() {
     }
     content = <Article title={title} body={body}></Article>;
   } else if (mode === "CREATE") {
-    content = <Create></Create>;
+    content = (
+      <Create
+        onCreate={(_title, _body) => {
+          const newTopic = { id: nextId, title: _title, body: _body };
+          const newTopics = [...topics]; //
+          newTopics.push(newTopic);
+          setTopics(newTopics);
+          setMode("READ");
+          setId(nextId);
+          setNextId(nextId + 1);
+        }}
+      ></Create>
+    );
   }
   return (
     <div>
@@ -118,7 +140,7 @@ function App() {
         topics={topics}
         onChangeMode={(_id) => {
           setMode("READ");
-          setid(_id);
+          setId(_id);
           //alert(id); //경고장으로 나오는 부분
         }}
       ></Nav>
