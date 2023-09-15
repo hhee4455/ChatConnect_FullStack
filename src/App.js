@@ -19,6 +19,7 @@ function Header(props) {
     </header>
   );
 }
+
 function Nav(props) {
   const lis = [];
   for (let i = 0; i < props.topics.length; i++) {
@@ -87,6 +88,52 @@ function Create(props) {
   );
 }
 
+function Update(props) {
+  const [title, setTitle] = useState(props.title);
+  const [body, setBody] = useState(props.body);
+  return (
+    <article>
+      <h2>Update</h2>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const title = event.target.title.value;
+          const body = event.target.body.value;
+          props.onUpdate(title, body);
+          // event.target = form이다.
+        }}
+      >
+        {/*form 태그 어떤 정보를 서버로 전송할때 쓴다. 
+          onSubmit  submit 버튼을 눌렀을 때 폼 태그에서 발생하는 이벤트*/}
+        <p>
+          <input
+            type="text"
+            name="title"
+            placeholder="title"
+            value={title}
+            onChange={(event) => {
+              setTitle(event.target.value);
+            }}
+          />
+        </p>
+        <p>
+          <textarea
+            name="body"
+            placeholder="body"
+            value={body}
+            onChange={(event) => {
+              setBody(event.target.value);
+            }}
+          />
+        </p>
+        <p>
+          <input type="submit" value="Update" /> {/*전송버튼*/}
+        </p>
+      </form>
+    </article>
+  );
+}
+
 function App() {
   // const _mode = useState("WELCOME");   //state 부분
   // const mode = _mode[0];
@@ -100,6 +147,7 @@ function App() {
     { id: 3, title: "javascript", body: "javascript is ... " },
   ]);
   let content = null;
+  let contextControl = null;
   if (mode === "WELCOME") {
     content = <Article title="Welcom" body="Hello, WEB"></Article>;
   } else if (mode === "READ") {
@@ -113,6 +161,37 @@ function App() {
       }
     }
     content = <Article title={title} body={body}></Article>;
+    contextControl = (
+      <>
+        <li>
+          <a
+            href={"/update/" + id}
+            onClick={(event) => {
+              event.preventDefault();
+              setMode("UPDATE");
+            }}
+          >
+            Update
+          </a>
+        </li>
+        <li>
+          <input
+            type="button"
+            value="Delete"
+            onClick={() => {
+              const newTopics = [];
+              for (let i = 0; i < topics.length; i++) {
+                if (topics[i].id !== id) {
+                  newTopics.push(topics[i]);
+                }
+              }
+              setTopics(newTopics);
+              setMode("WELCOME");
+            }}
+          ></input>
+        </li>
+      </>
+    );
   } else if (mode === "CREATE") {
     content = (
       <Create
@@ -126,6 +205,35 @@ function App() {
           setNextId(nextId + 1);
         }}
       ></Create>
+    );
+  } else if (mode === "UPDATE") {
+    let title,
+      body = null;
+    for (let i = 0; i < topics.length; i++) {
+      //html, css, js 클릭시 title,body 출력
+      if (topics[i].id === id) {
+        title = topics[i].title;
+        body = topics[i].body;
+      }
+    }
+    content = (
+      <Update
+        title={title}
+        body={body}
+        onUpdate={(title, body) => {
+          console.log(title, body);
+          const newTopics = [...topics];
+          const updatedTopic = { id: id, title: title, body: body };
+          for (let i = 0; i < newTopics.length; i++) {
+            if (newTopics[i].id === id) {
+              newTopics[i] = updatedTopic;
+              break;
+            }
+          }
+          setTopics(newTopics);
+          setMode("READ");
+        }}
+      ></Update>
     );
   }
   return (
@@ -145,16 +253,19 @@ function App() {
         }}
       ></Nav>
       {content}
-      <a
-        href="/create"
-        onClick={(event) => {
-          //Create 생성
-          event.preventDefault(); //a태그의 기본적인 동작을 못하게 하기 위해서
-          setMode("CREATE"); //App 다시 동작
-        }}
-      >
-        Create
-      </a>
+      <li>
+        <a
+          href="/create"
+          onClick={(event) => {
+            //Create 생성
+            event.preventDefault(); //a태그의 기본적인 동작을 못하게 하기 위해서
+            setMode("CREATE"); //App 다시 동작
+          }}
+        >
+          Create
+        </a>
+      </li>
+      {contextControl}
     </div>
   );
 }
