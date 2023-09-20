@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "./globals.css";
+import connectDB from "../../db";
 
 export const metadata = {
   title: "Web tutorials",
@@ -8,6 +9,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const resp = await fetch("http://localhost:9999/topics");
+  //connectDB();
   const topics = await resp.json();
   return (
     <html>
