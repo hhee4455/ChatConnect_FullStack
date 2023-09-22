@@ -1,12 +1,12 @@
 "use client"; // 미리 정의된 클라이언트를 사용하겠다는 선언
 
-import Button from "@/app/components/Button";
+import Button from "@/app/components/Button"; // 버튼 컴포넌트를 가져옴
 import Input from "@/app/components/inputs/input"; // 입력 컴포넌트를 가져옴
 
-import { BsGithub, BsGoogle } from "react-icons/bs";
+import { BsGithub, BsGoogle } from "react-icons/bs"; // React Icons 라이브러리에서 아이콘을 가져옴
 import { useCallback, useState } from "react"; // React에서 사용할 useCallback과 useState를 가져옴
 import { FieldValues, useForm, SubmitHandler } from "react-hook-form"; // react-hook-form 라이브러리에서 필요한 요소들을 가져옴
-import AuthSocialButton from "./AuthSocialButton";
+import AuthSocialButton from "./AuthSocialButton"; // 소셜 로그인 버튼 컴포넌트를 가져옴
 
 // "LOGIN" 또는 "REGISTER" 중 하나의 문자열 값을 가질 수 있는 타입을 정의
 type Variant = "LOGIN" | "REGISTER";
@@ -67,7 +67,7 @@ const AuthForm = () => {
       sm:mx-auto            
       sm:w-full             
       sm:max-w-md"
-      // 상단 여백을 8단위로 설정
+      // 상단 여백을 8단위로 설정 (Mobile First 디자인)
       // 스몰(sm) 화면 크기일 때 수평 가운데 정렬
       // 스몰 화면 크기일 때 가로 폭을 100%로 설정
       // 스몰 화면 크기일 때 최대 가로 폭을 중간 크기로 설정
@@ -89,8 +89,15 @@ const AuthForm = () => {
       >
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
-            <Input id="name" label="Name" register={register} errors={errors} />
+            <Input
+              id="name"
+              label="Name"
+              register={register}
+              errors={errors}
+              disabled={isLoading}
+            />
           )}
+          {/* 등록 모드("REGISTER")일 때 이름 입력 필드 표시 */}
           <Input
             id="email"
             label="Email address"
@@ -98,6 +105,7 @@ const AuthForm = () => {
             register={register}
             errors={errors}
           />
+          {/* 이메일 입력 필드 표시 */}
           <Input
             id="password"
             label="Password"
@@ -105,11 +113,13 @@ const AuthForm = () => {
             register={register}
             errors={errors}
           />
+          {/* 비밀번호 입력 필드 표시 */}
           <div>
             <Button disabled={isLoading} fullWidth type="submit">
               {variant === "LOGIN" ? "Sign in" : "Register"}
             </Button>
           </div>
+          {/* 로그인 또는 등록 버튼 표시 */}
         </form>
         <div className="mt-6">
           <div className="relative">
@@ -130,11 +140,11 @@ const AuthForm = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="bg-white px-2 text-gray-500">
-                Or continue With
+                or continue with
               </span>
             </div>
           </div>
-
+          {/* 수평 구분선 및 "or continue with" 텍스트 표시 */}
           <div className="mt-6 flex gap-2">
             <AuthSocialButton
               icon={BsGithub}
@@ -145,8 +155,8 @@ const AuthForm = () => {
               onClick={() => socialAction("google")}
             />
           </div>
+          {/* 소셜 로그인 버튼 표시 (GitHub 및 Google) */}
         </div>
-
         <div
           className="
             flex
@@ -163,9 +173,11 @@ const AuthForm = () => {
               ? "New to Messenger?"
               : "Already have an account?"}
           </div>
+          {/* 로그인 또는 등록 링크 텍스트 표시 */}
           <div onClick={toggleVariant} className="underline cursor-pointer">
             {variant === "LOGIN" ? "Create an account" : "Login"}
           </div>
+          {/* 로그인 또는 등록 링크 표시 및 토글 기능 제공 */}
         </div>
       </div>
     </div>

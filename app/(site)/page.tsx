@@ -1,5 +1,5 @@
-import Image from "next/image";
-import AuthForm from "./components/AuthForm";
+import Image from "next/image"; // Next.js에서 이미지를 렌더링하기 위한 Image 컴포넌트를 가져옵니다.
+import AuthForm from "./components/AuthForm"; // 로그인 폼 컴포넌트를 가져옵니다.
 
 export default function Home() {
   return (
@@ -14,11 +14,12 @@ export default function Home() {
         lg:px-8
         bg-gray-100"
     >
+      {/* 페이지의 상단 로고 */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Image
           alt="Logo"
-          height="48"
-          width="48"
+          height="50"
+          width="50"
           className="mx-auto w-auto"
           src="/images/logo.png"
         />
@@ -34,6 +35,8 @@ export default function Home() {
           sign in to your account
         </h2>
       </div>
+
+      {/* 로그인 폼을 렌더링합니다. */}
       <AuthForm />
     </div>
   );
