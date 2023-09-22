@@ -1,5 +1,6 @@
 "use client"; // 미리 정의된 클라이언트를 사용하겠다는 선언
 
+import axios from "axios";
 import Button from "@/app/components/Button"; // 버튼 컴포넌트를 가져옴
 import Input from "@/app/components/inputs/input"; // 입력 컴포넌트를 가져옴
 
@@ -44,7 +45,7 @@ const AuthForm = () => {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
-      // "REGISTER" 모드인 경우 Axios를 사용한 SignIn 처리
+      axios.post("/api/register", data);
     }
 
     if (variant === "LOGIN") {
@@ -104,6 +105,7 @@ const AuthForm = () => {
             type="email"
             register={register}
             errors={errors}
+            disabled={isLoading}
           />
           {/* 이메일 입력 필드 표시 */}
           <Input
@@ -112,6 +114,7 @@ const AuthForm = () => {
             type="password"
             register={register}
             errors={errors}
+            disabled={isLoading}
           />
           {/* 비밀번호 입력 필드 표시 */}
           <div>
