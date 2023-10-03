@@ -1,14 +1,23 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Prisma 스키마 파일입니다. 
+// 더 자세한 정보는 위 링크에서 확인할 수 있습니다.
+
 generator client {
   provider = "prisma-client-js"
 }
+
+// Prisma 클라이언트 코드 생성을 위한 generator 블록입니다.
+// "prisma-client-js" 프로바이더를 사용하여 JavaScript로 작성된 Prisma 클라이언트 코드를 생성합니다.
 
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+// 데이터베이스 연결 정보를 설정하는 datasource 블록입니다.
+// MongoDB를 데이터베이스 프로바이더로 사용하고, DATABASE_URL 환경 변수를 통해 연결 정보를 가져옵니다.
 
 model User {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
@@ -30,6 +39,9 @@ model User {
   messages Message[]
 }
 
+// "User" 모델을 정의합니다. 사용자 정보를 저장하는 모델입니다.
+// 각 필드의 의미와 데이터베이스 매핑 등이 상세히 주석으로 설명되어 있습니다.
+
 model Account {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId             String   @db.ObjectId
@@ -48,6 +60,9 @@ model Account {
 
   @@unique([provider, providerAccountId])
 }
+
+// "Account" 모델을 정의합니다. 사용자의 연결된 계정 정보를 저장하는 모델입니다.
+// 각 필드의 의미와 관계, 유니크 제약 조건 등이 상세히 주석으로 설명되어 있습니다.
 
 model Conversation {
   id String @id @default(auto()) @map("_id") @db.ObjectId

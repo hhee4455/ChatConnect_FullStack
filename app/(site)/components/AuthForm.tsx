@@ -5,9 +5,12 @@ import Button from "@/app/components/Button"; // 버튼 컴포넌트를 가져�
 import Input from "@/app/components/inputs/input"; // 입력 컴포넌트를 가져옴
 
 import { BsGithub, BsGoogle } from "react-icons/bs"; // React Icons 라이브러리에서 아이콘을 가져옴
+import { RiKakaoTalkFill } from "react-icons/ri";
 import { useCallback, useState } from "react"; // React에서 사용할 useCallback과 useState를 가져옴
 import { FieldValues, useForm, SubmitHandler } from "react-hook-form"; // react-hook-form 라이브러리에서 필요한 요소들을 가져옴
 import AuthSocialButton from "./AuthSocialButton"; // 소셜 로그인 버튼 컴포넌트를 가져옴
+import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 // "LOGIN" 또는 "REGISTER" 중 하나의 문자열 값을 가질 수 있는 타입을 정의
 type Variant = "LOGIN" | "REGISTER";
@@ -45,11 +48,27 @@ const AuthForm = () => {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
-      axios.post("/api/register", data);
+      axios
+        .post("/api/register", data)
+        .catch(() => toast.error("잘못 입력됐습니다!"))
+        .finally(() => setIsLoading(false));
     }
 
     if (variant === "LOGIN") {
-      // "LOGIN" 모드인 경우 NextAuth를 사용한 SignIn 처리
+      signIn("credentials", {
+        ...data,
+        redirect: false,
+      })
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error("잘못 됐습니다.");
+          }
+
+          if (callback?.ok && !callback?.error) {
+            toast.success("로그인 성공!");
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 
@@ -58,6 +77,16 @@ const AuthForm = () => {
     setIsLoading(true);
 
     // NextAuth를 사용한 소셜 로그인 처리
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error("잘못 됐습니다.");
+        }
+        if (callback?.ok && !callback?.error) {
+          toast.success("로그인 성공!");
+        }
+      })
+      .finally(() => setIsLoading(false));
   };
 
   // 반환되는 JSX 요소 (React 컴포넌트의 렌더링 결과)
@@ -92,7 +121,7 @@ const AuthForm = () => {
           {variant === "REGISTER" && (
             <Input
               id="name"
-              label="Name"
+              label="이름"
               register={register}
               errors={errors}
               disabled={isLoading}
@@ -101,7 +130,7 @@ const AuthForm = () => {
           {/* 등록 모드("REGISTER")일 때 이름 입력 필드 표시 */}
           <Input
             id="email"
-            label="Email address"
+            label="이메일"
             type="email"
             register={register}
             errors={errors}
@@ -110,7 +139,7 @@ const AuthForm = () => {
           {/* 이메일 입력 필드 표시 */}
           <Input
             id="password"
-            label="Password"
+            label="비밀번호"
             type="password"
             register={register}
             errors={errors}
@@ -142,9 +171,7 @@ const AuthForm = () => {
               />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">
-                or continue with
-              </span>
+              <span className="bg-white px-2 text-gray-500">소셜 로그인</span>
             </div>
           </div>
           {/* 수평 구분선 및 "or continue with" 텍스트 표시 */}
@@ -156,6 +183,10 @@ const AuthForm = () => {
             <AuthSocialButton
               icon={BsGoogle}
               onClick={() => socialAction("google")}
+            />
+            <AuthSocialButton
+              icon={RiKakaoTalkFill}
+              onClick={() => socialAction("kakao")}
             />
           </div>
           {/* 소셜 로그인 버튼 표시 (GitHub 및 Google) */}
@@ -173,12 +204,12 @@ const AuthForm = () => {
         >
           <div>
             {variant === "LOGIN"
-              ? "New to Messenger?"
-              : "Already have an account?"}
+              ? "아직 회원이 아니세요?"
+              : "이미 회원이신가요?"}
           </div>
           {/* 로그인 또는 등록 링크 텍스트 표시 */}
           <div onClick={toggleVariant} className="underline cursor-pointer">
-            {variant === "LOGIN" ? "Create an account" : "Login"}
+            {variant === "LOGIN" ? "회원가입" : "로그인"}
           </div>
           {/* 로그인 또는 등록 링크 표시 및 토글 기능 제공 */}
         </div>

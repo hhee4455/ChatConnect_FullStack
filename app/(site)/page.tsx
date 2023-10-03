@@ -32,7 +32,7 @@ export default function Home() {
                 tracking-tight
                 text-gray-900"
         >
-          sign in to your account
+          Chat Conect 환영합니다.
         </h2>
       </div>
 
