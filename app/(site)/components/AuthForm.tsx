@@ -6,6 +6,7 @@ import Input from "@/app/components/inputs/input"; // 입력 컴포넌트를 가
 
 import { BsGithub, BsGoogle } from "react-icons/bs"; // React Icons 라이브러리에서 아이콘을 가져옴
 import { RiKakaoTalkFill } from "react-icons/ri";
+import KakaoLoginButton from "./kakaoLoginButton"; // 카카오 로그인 버튼 컴포넌트를 가져옴
 import { useCallback, useState } from "react"; // React에서 사용할 useCallback과 useState를 가져옴
 import { FieldValues, useForm, SubmitHandler } from "react-hook-form"; // react-hook-form 라이브러리에서 필요한 요소들을 가져옴
 import AuthSocialButton from "./AuthSocialButton"; // 소셜 로그인 버튼 컴포넌트를 가져옴
@@ -148,7 +149,7 @@ const AuthForm = () => {
           {/* 비밀번호 입력 필드 표시 */}
           <div>
             <Button disabled={isLoading} fullWidth type="submit">
-              {variant === "LOGIN" ? "Sign in" : "Register"}
+              {variant === "LOGIN" ? "로그인" : "회원가입"}
             </Button>
           </div>
           {/* 로그인 또는 등록 버튼 표시 */}
@@ -184,7 +185,7 @@ const AuthForm = () => {
               icon={BsGoogle}
               onClick={() => socialAction("google")}
             />
-            <AuthSocialButton
+            <KakaoLoginButton
               icon={RiKakaoTalkFill}
               onClick={() => socialAction("kakao")}
             />
