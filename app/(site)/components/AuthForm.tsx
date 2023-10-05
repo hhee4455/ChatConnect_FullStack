@@ -6,6 +6,7 @@ import Input from "@/app/components/inputs/input"; // 입력 컴포넌트를 가
 
 import { BsGithub, BsGoogle } from "react-icons/bs"; // React Icons 라이브러리에서 아이콘을 가져옴
 import { RiKakaoTalkFill } from "react-icons/ri";
+import { SiNaver } from "react-icons/si";
 import { useCallback, useState } from "react"; // React에서 사용할 useCallback과 useState를 가져옴
 import { FieldValues, useForm, SubmitHandler } from "react-hook-form"; // react-hook-form 라이브러리에서 필요한 요소들을 가져옴
 import AuthSocialButton from "./AuthSocialButton"; // 소셜 로그인 버튼 컴포넌트를 가져옴
@@ -187,6 +188,10 @@ const AuthForm = () => {
             <AuthSocialButton
               icon={RiKakaoTalkFill}
               onClick={() => socialAction("kakao")}
+            />
+            <AuthSocialButton
+              icon={SiNaver}
+              onClick={() => socialAction("naver")}
             />
           </div>
           {/* 소셜 로그인 버튼 표시 (GitHub 및 Google) */}
