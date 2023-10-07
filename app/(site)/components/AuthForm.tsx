@@ -7,11 +7,12 @@ import Input from "@/app/components/inputs/input"; // 입력 컴포넌트를 가
 import { BsGithub, BsGoogle } from "react-icons/bs"; // React Icons 라이브러리에서 아이콘을 가져옴
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { SiNaver } from "react-icons/si";
-import { useCallback, useState } from "react"; // React에서 사용할 useCallback과 useState를 가져옴
+import { useCallback, useEffect, useState } from "react"; // React에서 사용할 useCallback과 useState를 가져옴
 import { FieldValues, useForm, SubmitHandler } from "react-hook-form"; // react-hook-form 라이브러리에서 필요한 요소들을 가져옴
 import AuthSocialButton from "./AuthSocialButton"; // 소셜 로그인 버튼 컴포넌트를 가져옴
 import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // "LOGIN" 또는 "REGISTER" 중 하나의 문자열 값을 가질 수 있는 타입을 정의
 type Variant = "LOGIN" | "REGISTER";
@@ -19,8 +20,16 @@ type Variant = "LOGIN" | "REGISTER";
 // 함수형 컴포넌트 AuthForm 선언
 const AuthForm = () => {
   // 현재 폼의 상태를 나타내는 variant와 isLoading 상태를 useState를 통해 정의
+  const session = useSession();
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      router.push("/users");
+    }
+  }, [session?.status, router]);
 
   // 버튼을 클릭할 때 variant 상태를 토글하는 함수를 정의
   const toggleVariant = useCallback(() => {
@@ -51,6 +60,7 @@ const AuthForm = () => {
     if (variant === "REGISTER") {
       axios
         .post("/api/register", data)
+        .then(() => signIn("credentials", data))
         .catch(() => toast.error("잘못 입력됐습니다!"))
         .finally(() => setIsLoading(false));
     }
@@ -67,6 +77,7 @@ const AuthForm = () => {
 
           if (callback?.ok && !callback?.error) {
             toast.success("로그인 성공!");
+            router.push("/users");
           }
         })
         .finally(() => setIsLoading(false));

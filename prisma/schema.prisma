@@ -44,20 +44,22 @@ model User {
 
 model Account {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String   @db.ObjectId
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.String
-  access_token       String?  @db.String
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.String
-  session_state      String?
+  userId             String @db.ObjectId // 사용자 ID와 연결
+  type               String               // 계정 유형
+  provider           String               // 제공자 (예: Google, Facebook)
+  providerAccountId  String               // 제공자에서 부여하는 계정 ID
+  refresh_token      String?  @db.String   // 새로 고침 토큰
+  access_token       String?  @db.String   // 엑세스 토큰
+  expires_at         Int?                 // 토큰 만료 시간
+  token_type         String?              // 토큰 유형
+  scope              String?              // 스코프 정보
+  id_token           String?  @db.String   // ID 토큰
+  session_state      String?              // 세션 상태
 
+  // 사용자와의 관계 설정
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // provider와 providerAccountId 조합이 고유해야 함
   @@unique([provider, providerAccountId])
 }
 

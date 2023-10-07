@@ -6,6 +6,7 @@ import GoogleProvider from "next-auth/providers/google";
 import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import axios from "axios";
 
 import prisma from "@/app/libs/prismadb";
 
