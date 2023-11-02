@@ -27,8 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // 웹 페이지의 기본 언어를 영어(en)로 설정합니다.
-    <html lang="en">
+    <html>
       {/* 페이지의 본문(body)에 Inter 폰트 클래스를 적용합니다. */}
       <body className={inter.className}>
         {/* AuthContext와 ToasterContext 컴포넌트를 렌더링하고, 자식 컴포넌트를 포함합니다. */}

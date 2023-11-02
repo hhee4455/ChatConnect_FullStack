@@ -109,10 +109,6 @@ const AuthForm = () => {
       sm:mx-auto            
       sm:w-full             
       sm:max-w-md"
-      // 상단 여백을 8단위로 설정 (Mobile First 디자인)
-      // 스몰(sm) 화면 크기일 때 수평 가운데 정렬
-      // 스몰 화면 크기일 때 가로 폭을 100%로 설정
-      // 스몰 화면 크기일 때 최대 가로 폭을 중간 크기로 설정
     >
       <div
         className="
@@ -122,12 +118,6 @@ const AuthForm = () => {
         shadow               
         sm:rounded-lg        
         sm:px-10"
-        // 배경색을 흰색으로 지정
-        // 왼쪽 및 오른쪽의 내부 패딩을 4단위로 설정
-        // 위아래의 내부 패딩을 8단위로 설정
-        // 그림자 효과를 추가
-        // 스몰 화면 크기일 때 둥근 모서리 클래스를 적용
-        // 스몰 화면 크기일 때 내부 패딩을 10단위로 설정
       >
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
