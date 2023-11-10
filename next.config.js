@@ -11,6 +11,7 @@ const nextConfig = {
       "lh3.googleusercontent.com",
       "static.naver.net",
       "openapi.naver.com/v1/nid/me",
+      "k.kakaocdn.net",
     ],
   },
 };

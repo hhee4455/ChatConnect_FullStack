@@ -37,6 +37,8 @@ model User {
 
   accounts Account[]
   messages Message[]
+
+  friendships Friendship[]
 }
 
 // "User" 모델을 정의합니다. 사용자 정보를 저장하는 모델입니다.
@@ -49,6 +51,7 @@ model Account {
   provider           String               // 제공자 (예: Google, Facebook)
   providerAccountId  String               // 제공자에서 부여하는 계정 ID
   refresh_token      String?  @db.String   // 새로 고침 토큰
+  refresh_token_expires_in Int?         // refresh_token_expires_in 필드 추가
   access_token       String?  @db.String   // 엑세스 토큰
   expires_at         Int?                 // 토큰 만료 시간
   token_type         String?              // 토큰 유형
@@ -61,6 +64,8 @@ model Account {
 
   // provider와 providerAccountId 조합이 고유해야 함
   @@unique([provider, providerAccountId])
+
+
 }
 
 // "Account" 모델을 정의합니다. 사용자의 연결된 계정 정보를 저장하는 모델입니다.
@@ -94,4 +99,15 @@ model Message {
   
   senderId String @db.ObjectId
   sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model Friendship {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  userAId   String @db.ObjectId
+  userBId   String @db.ObjectId
+
+  userA     User @relation("UserAFriends", fields: [userAId], references: [id])
+  userB     User @relation("UserBFriends", fields: [userBId], references: [id])
+
+  @@unique([userAId, userBId])
 }
