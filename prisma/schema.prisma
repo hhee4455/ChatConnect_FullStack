@@ -35,10 +35,11 @@ model User {
   seenMessageIds String[] @db.ObjectId
   seenMessages Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
+  friendshipsA Friendship[] @relation("UserAFriends")
+  friendshipsB Friendship[] @relation("UserBFriends")
+
   accounts Account[]
   messages Message[]
-
-  friendships Friendship[]
 }
 
 // "User" 모델을 정의합니다. 사용자 정보를 저장하는 모델입니다.
