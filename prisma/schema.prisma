@@ -110,5 +110,6 @@ model Friendship {
   userA     User @relation("UserAFriends", fields: [userAId], references: [id])
   userB     User @relation("UserBFriends", fields: [userBId], references: [id])
 
+
   @@unique([userAId, userBId])
 }

@@ -1,6 +1,5 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
-
 import prisma from "@/app/libs/prismadb";
 
 export async function POST(request: Request) {
@@ -63,15 +62,35 @@ export async function POST(request: Request) {
       return NextResponse.json(singleConversation);
     }
 
+    // 수정된 부분 시작
+    const userToAdd = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+      },
+    });
+
+    if (!userToAdd) {
+      return new NextResponse("User not found", { status: 404 });
+    }
+
     const newConversation = await prisma.conversation.create({
       data: {
         users: {
           connect: [
             {
               id: currentUser.id,
+              name: currentUser.name,
+              image: currentUser.image,
             },
             {
               id: userId,
+              name: userToAdd.name,
+              image: userToAdd.image,
             },
           ],
         },
@@ -80,6 +99,7 @@ export async function POST(request: Request) {
         users: true,
       },
     });
+    // 수정된 부분 끝
 
     return NextResponse.json(newConversation);
   } catch (error) {
