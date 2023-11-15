@@ -18,11 +18,11 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
     setIsLoading(true);
 
     axios
-      .post("/api/conversations", {
+      .post("/api/friendship", {
         userId: data.id,
       })
       .then((data) => {
-        router.push(`/conversations/${data.data.id}`);
+        router.push(`/friendship/${data.data.id}`);
       })
       .finally(() => setIsLoading(false));
   }, [data, router]);

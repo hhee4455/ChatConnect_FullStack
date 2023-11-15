@@ -26,10 +26,10 @@ const useRoutes = () => {
         active: pathname === "/users",
       },
       {
-        label: "AddFriends",
-        href: "/addfriends",
+        label: "friendship",
+        href: "/friendship",
         icon: AiOutlineUserAdd,
-        active: pathname === "/addfriends",
+        active: pathname === "/friendship",
       },
       {
         label: "Lagout",

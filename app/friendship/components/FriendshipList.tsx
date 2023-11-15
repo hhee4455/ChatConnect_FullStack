@@ -1,22 +1,27 @@
+"use client";
+
 import React, { useState } from "react";
 import { FullFriendshipType } from "@/app/types";
+import { User } from "@prisma/client";
+import UserBox from "./Userbox";
 
-// FriendshipListProps 타입 추가
 interface FriendshipListProps {
   initialItems: FullFriendshipType[];
+  users: User[];
 }
 
-const FriendshipList: React.FC<FriendshipListProps> = ({ initialItems }) => {
+const FriendshipList: React.FC<FriendshipListProps> = ({
+  initialItems,
+  users,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  // 만약 initialItems가 배열이 아니라면, 기본값으로 빈 배열을 사용하도록 수정
   const itemsArray = Array.isArray(initialItems) ? initialItems : [];
 
-  // FullFriendshipType에 어떤 속성이 있는지 확인하고, 적절한 속성을 사용하여 필터링합니다.
   const filteredItems = itemsArray.filter(
     (item) =>
       item.userB &&
@@ -76,6 +81,9 @@ const FriendshipList: React.FC<FriendshipListProps> = ({ initialItems }) => {
                 </li>
               ))}
             </ul>
+            {users.map((user) => (
+              <UserBox key={user.id} data={user} />
+            ))}
           </div>
         </div>
       </aside>

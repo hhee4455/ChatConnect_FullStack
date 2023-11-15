@@ -1,10 +1,10 @@
 "use client";
 
-import { User } from "@prisma/client";
+import { FullFriendshipType } from "@/app/types";
 import UserBox from "./Userbox";
 
 interface UserListProps {
-  items: User[];
+  items: FullFriendshipType[];
 }
 
 const UserList: React.FC<UserListProps> = ({ items }) => {

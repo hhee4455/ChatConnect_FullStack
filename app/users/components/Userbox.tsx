@@ -1,13 +1,13 @@
 "use client";
 
 import axios from "axios";
-import { User } from "@prisma/client";
+import { FullFriendshipType } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import Avatar from "@/app/components/Avatar";
 
 interface UserBoxProps {
-  data: User;
+  data: FullFriendshipType;
 }
 
 const UserBox: React.FC<UserBoxProps> = ({ data }) => {
@@ -19,7 +19,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
 
     axios
       .post("/api/conversations", {
-        userId: data.id,
+        userId: data.userB.id, // Assuming the current user is userA
       })
       .then((data) => {
         router.push(`/conversations/${data.data.id}`);
@@ -42,10 +42,9 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
         rounded-lg
         transition
         cursor-pointer
-    
     "
     >
-      <Avatar user={data} />
+      <Avatar user={data.userB} /> {/* Assuming the current user is userA */}
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <div
@@ -63,7 +62,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
                 text-gray-900
             "
             >
-              {data.name}
+              {data.userB.name} {/* Assuming the current user is userA */}
             </p>
           </div>
         </div>
