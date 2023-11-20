@@ -70,28 +70,6 @@ export async function POST(request: Request) {
       });
     }
 
-    // 검색어를 사용하여 사용자 목록을 검색
-    let filteredUsers;
-
-    if (searchTerm) {
-      filteredUsers = await prisma.user.findMany({
-        where: {
-          name: {
-            contains: searchTerm,
-          },
-        },
-      });
-    } else {
-      // 만약 검색어가 없다면 모든 사용자를 반환하거나, 필요에 따라 다른 로직을 추가하세요.
-      // 예: 모든 사용자 목록을 반환하도록 설정
-      filteredUsers = await prisma.user.findMany();
-    }
-    // 사용자 목록에 대한 추가 로직 수행...
-    // ...
-
-    // 대화(conversation) 생성 부분을 비활성화했으므로 주석 처리
-
-    // Retrieve userToAdd
     const userToAdd = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -123,7 +101,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       result: "Success",
-      filteredUsers,
     });
   } catch (error) {
     return new NextResponse("Internal Error", { status: 500 });

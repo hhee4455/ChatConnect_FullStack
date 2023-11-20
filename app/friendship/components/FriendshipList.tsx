@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FullFriendshipType } from "@/app/types";
 import { User } from "@prisma/client";
 import UserBox from "./Userbox";
@@ -10,6 +10,8 @@ interface FriendshipListProps {
   initialItems: FullFriendshipType[];
   users: User[];
 }
+
+// ...
 
 const FriendshipList: React.FC<FriendshipListProps> = ({
   initialItems,
@@ -26,11 +28,16 @@ const FriendshipList: React.FC<FriendshipListProps> = ({
     setSearchTerm(term);
 
     try {
-      // 검색어를 서버에 전송
-      const response = await axios.post("/api/search", { searchTerm: term });
-
-      // 서버에서 받아온 검색 결과를 상태에 업데이트
-      setFilteredUsers(response.data.filteredUsers);
+      // 검색어가 비어 있지 않은 경우에만 서버에 요청 보내기
+      if (term.trim() !== "") {
+        const response = await axios.post("/api/searchTerm", {
+          searchTerm: term,
+        });
+        setFilteredUsers(response.data.filteredUsers);
+      } else {
+        // 검색어가 비어 있을 때는 전체 사용자 목록 가져오기
+        setFilteredUsers(users);
+      }
     } catch (error) {
       console.error("서버 오류:", error);
     }
@@ -39,6 +46,11 @@ const FriendshipList: React.FC<FriendshipListProps> = ({
   const handleClose = () => {
     setShowConfirm(false);
   };
+
+  useEffect(() => {
+    // 컴포넌트가 처음 마운트될 때 전체 사용자 목록 가져오기
+    setFilteredUsers(users);
+  }, [users]);
 
   return (
     <div>
@@ -86,18 +98,14 @@ const FriendshipList: React.FC<FriendshipListProps> = ({
               onChange={handleSearchChange}
             />
             {/* 검색된 사용자 목록을 표시 */}
-            {filteredUsers.map((user) => (
-              <UserBox key={user.id} data={user} onClose={handleClose} />
-            ))}
-            {/* 나머지 사용자 목록 */}
-            {users.map((user) => (
-              <UserBox key={user.id} data={user} onClose={handleClose} />
-            ))}
+            {filteredUsers &&
+              filteredUsers.map((user) => (
+                <UserBox key={user.id} data={user} onClose={handleClose} />
+              ))}
           </div>
         </div>
       </aside>
     </div>
   );
 };
-
 export default FriendshipList;
