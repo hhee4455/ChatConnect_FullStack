@@ -15,9 +15,14 @@ const FriendshipList: React.FC<FriendshipListProps> = ({
   users,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleClose = () => {
+    setShowConfirm(false);
   };
 
   const itemsArray = Array.isArray(initialItems) ? initialItems : [];
@@ -74,15 +79,9 @@ const FriendshipList: React.FC<FriendshipListProps> = ({
               onChange={handleSearchChange}
             />
             {/* 여기에 친구 목록을 표시하는 로직 추가 */}
-            <ul className="space-y-2">
-              {filteredItems.map((item) => (
-                <li key={item.id} className="border-b border-gray-200 py-2">
-                  {item.userB?.name || "이름 없음"}
-                </li>
-              ))}
-            </ul>
+
             {users.map((user) => (
-              <UserBox key={user.id} data={user} />
+              <UserBox key={user.id} data={user} onClose={handleClose} />
             ))}
           </div>
         </div>

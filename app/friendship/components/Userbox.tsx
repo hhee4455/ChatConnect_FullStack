@@ -1,11 +1,10 @@
-"use client";
-
+import React from "react";
 import axios from "axios";
-import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import Avatar from "@/app/components/Avatar";
-import Modal from "@/app/components/Modal"; // 가정: Modal 컴포넌트가 존재
+import Modal from "./Modal"; // 가정: Modal 컴포넌트가 존재
+import { User } from "@prisma/client";
 
 interface UserBoxProps {
   data: User;
@@ -24,8 +23,22 @@ const UserBox: React.FC<UserBoxProps> = ({ data, onClose }) => {
       .post("/api/friendship", {
         userId: data.id,
       })
-      .then((data) => {
-        router.push(`/friendship/${data.data.id}`);
+      .then((response) => {
+        if (
+          response.data &&
+          response.data.error === "Duplicate friend addition"
+        ) {
+          console.error("오류입니다: 친구 중복 추가");
+        } else {
+          router.push(`/friendship/${response.data.id}`);
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 500) {
+          console.error("서버에서 내부 오류가 발생했습니다.");
+        } else {
+          console.error("알 수 없는 오류가 발생했습니다.", error);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -33,6 +46,22 @@ const UserBox: React.FC<UserBoxProps> = ({ data, onClose }) => {
       });
   }, [data, router]);
 
+  const handleCloseModal = useCallback(() => {
+    setIsLoading(true);
+
+    axios
+      .post("/api/friendship/cancel", {}) // 실제 서버의 엔드포인트에 맞게 수정
+      .then(() => {
+        console.log("모달이 닫힐 때 수행할 작업이 성공적으로 완료되었습니다.");
+      })
+      .catch((error) => {
+        console.error("서버에서 내부 오류가 발생했습니다.", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setShowConfirm(false);
+      });
+  }, []);
   return (
     <div
       onClick={() => setShowConfirm(true)}
@@ -74,17 +103,17 @@ const UserBox: React.FC<UserBoxProps> = ({ data, onClose }) => {
         </div>
       </div>
       {showConfirm && (
-        <Modal onClose={() => setShowConfirm(false)}>
+        <Modal>
           <div className="flex flex-col items-center justify-center">
             <p
               className="
-      mt-6
-      text-center
-      text-3xl
-      font-bold
-      tracking-tight
-      text-gray-900
-    "
+              mt-6
+              text-center
+              text-3xl
+              font-bold
+              tracking-tight
+              text-gray-900
+            "
             >
               친구 추가 확인
             </p>
@@ -93,29 +122,29 @@ const UserBox: React.FC<UserBoxProps> = ({ data, onClose }) => {
                 onClick={handleAddFriend}
                 disabled={isLoading}
                 className="
-                  bg-blue-500 
-                  hover:bg-blue-700 
-                  text-white 
-                  font-bold 
-                  py-2 
-                  px-4 
-                  rounded
-                "
+                bg-blue-500 
+                hover:bg-blue-700 
+                text-white 
+                font-bold 
+                py-2 
+                px-4 
+                rounded
+              "
               >
                 확인
               </button>
               <button
-                type="button"
+                onClick={handleCloseModal}
+                disabled={isLoading}
                 className=" 
-                  bg-red-600
-                  hover:bg-red-700 
-                  text-white 
-                  font-bold 
-                  py-2 
-                  px-4 
-                  rounded
-                "
-                onClick={onClose}
+                bg-red-600
+                hover:bg-red-700 
+                text-white 
+                font-bold 
+                py-2 
+                px-4 
+                rounded
+              "
               >
                 닫기
               </button>
