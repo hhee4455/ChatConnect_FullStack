@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { FullFriendshipType } from "@/app/types";
 import { User } from "@prisma/client";
 import UserBox from "./Userbox";
+import axios from "axios";
 
 interface FriendshipListProps {
   initialItems: FullFriendshipType[];
@@ -16,22 +17,28 @@ const FriendshipList: React.FC<FriendshipListProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+  const handleSearchChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+
+    try {
+      // 검색어를 서버에 전송
+      const response = await axios.post("/api/search", { searchTerm: term });
+
+      // 서버에서 받아온 검색 결과를 상태에 업데이트
+      setFilteredUsers(response.data.filteredUsers);
+    } catch (error) {
+      console.error("서버 오류:", error);
+    }
   };
 
   const handleClose = () => {
     setShowConfirm(false);
   };
-
-  const itemsArray = Array.isArray(initialItems) ? initialItems : [];
-
-  const filteredItems = itemsArray.filter(
-    (item) =>
-      item.userB &&
-      item.userB.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div>
@@ -78,8 +85,11 @@ const FriendshipList: React.FC<FriendshipListProps> = ({
               value={searchTerm}
               onChange={handleSearchChange}
             />
-            {/* 여기에 친구 목록을 표시하는 로직 추가 */}
-
+            {/* 검색된 사용자 목록을 표시 */}
+            {filteredUsers.map((user) => (
+              <UserBox key={user.id} data={user} onClose={handleClose} />
+            ))}
+            {/* 나머지 사용자 목록 */}
             {users.map((user) => (
               <UserBox key={user.id} data={user} onClose={handleClose} />
             ))}

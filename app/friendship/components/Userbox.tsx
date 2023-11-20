@@ -28,9 +28,13 @@ const UserBox: React.FC<UserBoxProps> = ({ data, onClose }) => {
           response.data &&
           response.data.error === "Duplicate friend addition"
         ) {
-          console.error("오류입니다: 친구 중복 추가");
         } else {
-          router.push(`/friendship/${response.data.id}`);
+          const conversationId = response.data.id;
+          if (conversationId) {
+            router.push(`/friendship/${conversationId}`);
+          } else {
+            console.error("서버 응답에 conversationId가 없습니다.");
+          }
         }
       })
       .catch((error) => {

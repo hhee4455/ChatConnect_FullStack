@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   try {
     const currentUser = await getCurrentUser();
     const body = await request.json();
-    const { userId, isGroup, members, name } = body;
+    const { userId, isGroup, members, name, searchTerm } = body;
 
     if (!currentUser?.id || !currentUser?.email) {
       return new NextResponse("Unauthorized", { status: 400 });
@@ -47,32 +47,49 @@ export async function POST(request: Request) {
       });
     }
 
-    const existingConversations = await prisma.conversation.findMany({
+    // 이미 친구인지 확인
+    const existingFriendship = await prisma.friendship.findFirst({
       where: {
         OR: [
           {
-            userIds: {
-              equals: [currentUser.id, userId],
-            },
+            userAId: currentUser.id,
+            userBId: userId,
           },
           {
-            userIds: {
-              equals: [userId, currentUser.id],
-            },
+            userAId: userId,
+            userBId: currentUser.id,
           },
         ],
       },
     });
 
-    const singleConversation = existingConversations[0];
-
-    if (singleConversation) {
-      // 중복 추가 시 특정 플래그를 추가하여 클라이언트에서 확인할 수 있도록 함
+    if (existingFriendship) {
+      // 이미 친구인 경우
       return NextResponse.json({
-        error: "Duplicate friend addition",
-        conversation: singleConversation,
+        error: "Already friends",
       });
     }
+
+    // 검색어를 사용하여 사용자 목록을 검색
+    let filteredUsers;
+
+    if (searchTerm) {
+      filteredUsers = await prisma.user.findMany({
+        where: {
+          name: {
+            contains: searchTerm,
+          },
+        },
+      });
+    } else {
+      // 만약 검색어가 없다면 모든 사용자를 반환하거나, 필요에 따라 다른 로직을 추가하세요.
+      // 예: 모든 사용자 목록을 반환하도록 설정
+      filteredUsers = await prisma.user.findMany();
+    }
+    // 사용자 목록에 대한 추가 로직 수행...
+    // ...
+
+    // 대화(conversation) 생성 부분을 비활성화했으므로 주석 처리
 
     // Retrieve userToAdd
     const userToAdd = await prisma.user.findUnique({
@@ -102,30 +119,12 @@ export async function POST(request: Request) {
       },
     });
 
-    // Create conversation
-    const newConversation = await prisma.conversation.create({
-      data: {
-        users: {
-          connect: [
-            {
-              id: currentUser.id,
-              name: currentUser.name,
-              image: currentUser.image,
-            },
-            {
-              id: userId,
-              name: userToAdd.name,
-              image: userToAdd.image,
-            },
-          ],
-        },
-      },
-      include: {
-        users: true,
-      },
-    });
+    // 대화 생성 부분을 비활성화했으므로 주석 처리
 
-    return NextResponse.json(newConversation);
+    return NextResponse.json({
+      result: "Success",
+      filteredUsers,
+    });
   } catch (error) {
     return new NextResponse("Internal Error", { status: 500 });
   }
