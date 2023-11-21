@@ -88,5 +88,3 @@ const handler = NextAuth(authOptions);
 
 // 핸들러를 내보냄 (GET 및 POST 요청에 대한 핸들러를 동일하게 사용)
 export { handler as GET, handler as POST };
-
-export const runtime = "edge";

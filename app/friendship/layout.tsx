@@ -21,5 +21,3 @@ export default async function FriendshipLayout({
     </Sidebar>
   );
 }
-
-export const runtime = "edge";

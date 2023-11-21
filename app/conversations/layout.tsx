@@ -17,5 +17,3 @@ export default async function ConversationLayout({
     </Sidebar>
   );
 }
-
-export const runtime = "edge";
