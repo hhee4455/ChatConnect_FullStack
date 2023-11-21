@@ -3,6 +3,13 @@ import bcrypt from "bcrypt";
 import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
 
+export const config = {
+  api: {
+    // Edge Runtime을 사용하도록 설정
+    externalResolver: true,
+  },
+};
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
