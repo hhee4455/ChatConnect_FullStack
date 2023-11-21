@@ -7,6 +7,7 @@ const nextConfig = {
     domains: [
       "k.kakaocdn.net",
       "res.cloudinary.com",
+      "k.kakaocdn.net",
       "avatars.githubusercontent.com",
       "lh3.googleusercontent.com",
       "static.naver.net",
