@@ -13,6 +13,7 @@ const nextConfig = {
       "static.naver.net",
       "openapi.naver.com/v1/nid/me",
       "k.kakaocdn.net",
+      "res.cloudinary.com",
     ],
   },
 };

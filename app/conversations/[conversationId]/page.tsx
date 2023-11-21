@@ -8,9 +8,9 @@ import EmptyState from "@/app/components/EmptyState";
 
 interface IParams {
   conversationId: string;
-};
+}
 
-const ChatId = async ({ params }: { params: IParams }) => {
+const ConversationID = async ({ params }: { params: IParams }) => {
   const conversation = await getConversationById(params.conversationId);
   const messages = await getMessages(params.conversationId);
 
@@ -21,18 +21,18 @@ const ChatId = async ({ params }: { params: IParams }) => {
           <EmptyState />
         </div>
       </div>
-    )
+    );
   }
 
-  return ( 
+  return (
     <div className="lg:pl-80 h-full">
       <div className="h-full flex flex-col">
         <Header conversation={conversation} />
-        <Body  />
+        <Body />
         <Form />
       </div>
     </div>
   );
-}
+};
 
-export default ChatId;
+export default ConversationID;

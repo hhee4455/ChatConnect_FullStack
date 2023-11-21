@@ -1,29 +1,26 @@
 import prisma from "@/app/libs/prismadb";
-import ConversationId from "../conversations/[conversationld]/page";
+import ConversationId from "../conversations/[conversationId]/page";
 import { getMaxAge } from "next/dist/server/image-optimizer";
 
-const getMessages = async (
-    ConversationId: string 
-) => {
-    try {
-        const messages = await prisma.message.findMany({
-            where: {
-                conversationId: ConversationId
-            },
-            include: {
-                sender: true,
-                seen: true,
-            },
-            orderBy: {
-                createdAt: 'asc'
-            }
-        });
-    
-        return messages;
-    }   catch (error: any) {
-        return[];
-    }
-  
+const getMessages = async (ConversationId: string) => {
+  try {
+    const messages = await prisma.message.findMany({
+      where: {
+        conversationId: ConversationId,
+      },
+      include: {
+        sender: true,
+        seen: true,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+
+    return messages;
+  } catch (error: any) {
+    return [];
+  }
 };
 
 export default getMessages;
