@@ -18,9 +18,4 @@ export default async function ConversationLayout({
   );
 }
 
-export const config = {
-  // Edge Runtime을 사용하도록 설정
-  api: {
-    externalResolver: true,
-  },
-};
+export const runtime = "edge";

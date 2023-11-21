@@ -89,9 +89,4 @@ const handler = NextAuth(authOptions);
 // 핸들러를 내보냄 (GET 및 POST 요청에 대한 핸들러를 동일하게 사용)
 export { handler as GET, handler as POST };
 
-export const config = {
-  // Edge Runtime을 사용하도록 설정
-  api: {
-    externalResolver: true,
-  },
-};
+export const runtime = "edge";
