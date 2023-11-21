@@ -36,6 +36,22 @@ export async function POST(request: Request) {
           users: true,
         },
       });
+
+      // 친구 목록에 새로 생성된 대화 상자의 사용자들을 추가
+      const conversationUsers = newConversation.users.map((user) => user.id);
+
+      // 현재 사용자를 제외한 나머지 사용자들과의 친구 관계 생성
+      const friendshipData = conversationUsers
+        .filter((userId) => userId !== currentUser.id)
+        .map((userId) => ({
+          userAId: currentUser.id,
+          userBId: userId,
+        }));
+
+      await prisma.friendship.createMany({
+        data: friendshipData,
+      });
+
       return NextResponse.json(newConversation);
     }
 
@@ -88,12 +104,8 @@ export async function POST(request: Request) {
     // Create friendship
     const friendship = await prisma.friendship.create({
       data: {
-        userA: {
-          connect: { id: currentUser.id },
-        },
-        userB: {
-          connect: { id: userId },
-        },
+        userAId: currentUser.id,
+        userBId: userId,
       },
     });
 

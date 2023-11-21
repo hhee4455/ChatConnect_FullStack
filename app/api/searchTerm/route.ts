@@ -18,6 +18,9 @@ export async function POST(request: Request) {
     if (searchTerm) {
       filteredUsers = await prisma.user.findMany({
         where: {
+          id: {
+            not: currentUser.id, // 현재 사용자 제외
+          },
           name: {
             contains: searchTerm,
           },
@@ -26,8 +29,15 @@ export async function POST(request: Request) {
     } else {
       // 만약 검색어가 없다면 모든 사용자를 반환하거나, 필요에 따라 다른 로직을 추가하세요.
       // 예: 모든 사용자 목록을 반환하도록 설정
-      filteredUsers = await prisma.user.findMany();
+      filteredUsers = await prisma.user.findMany({
+        where: {
+          id: {
+            not: currentUser.id, // 현재 사용자 제외
+          },
+        },
+      });
     }
+
     return NextResponse.json({
       result: "Success",
       filteredUsers,
