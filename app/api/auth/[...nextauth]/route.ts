@@ -82,15 +82,16 @@ export const authOptions: AuthOptions = {
   // NextAuth에서 사용할 시크릿 키 설정
   secret: process.env.NEXTAUTH_SECRET,
 };
-export const config = {
-  api: {
-    // Edge Runtime을 사용하도록 설정
-    externalResolver: true,
-  },
-};
 
 // NextAuth의 핸들러를 authOptions와 함께 설정
 const handler = NextAuth(authOptions);
+
+export const config = {
+  // Edge Runtime을 사용하도록 설정
+  api: {
+    externalResolver: true,
+  },
+};
 
 // 핸들러를 내보냄 (GET 및 POST 요청에 대한 핸들러를 동일하게 사용)
 export { handler as GET, handler as POST };

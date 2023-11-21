@@ -3,13 +3,6 @@ import getUsers from "../actions/getUsers";
 import Sidebar from "../components/sidebar/Sidebar";
 import FriendshipList from "./components/FriendshipList";
 
-export const config = {
-  api: {
-    // Edge Runtime을 사용하도록 설정
-    externalResolver: true,
-  },
-};
-
 export default async function FriendshipLayout({
   children,
 }: {
@@ -26,3 +19,10 @@ export default async function FriendshipLayout({
     </Sidebar>
   );
 }
+
+export const config = {
+  // Edge Runtime을 사용하도록 설정
+  api: {
+    externalResolver: true,
+  },
+};

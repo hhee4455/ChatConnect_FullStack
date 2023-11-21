@@ -2,13 +2,6 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 
-export const config = {
-  api: {
-    // Edge Runtime을 사용하도록 설정
-    externalResolver: true,
-  },
-};
-
 export async function POST(request: Request) {
   try {
     const currentUser = await getCurrentUser();
@@ -113,3 +106,9 @@ export async function POST(request: Request) {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+export const config = {
+  // Edge Runtime을 사용하도록 설정
+  api: {
+    externalResolver: true,
+  },
+};
