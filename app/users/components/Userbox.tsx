@@ -20,9 +20,16 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
     axios
       .post("/api/conversations", {
         userId: data.userB.id, // Assuming the current user is userA
+        isGroup: false,
       })
-      .then((data) => {
-        router.push(`/conversations/${data.data.id}`);
+      .then((response) => {
+        const conversationId = response.data?.id;
+        if (conversationId) {
+          router.push(`/conversations/${conversationId}`);
+        } else {
+          // Handle error case
+          console.error("Failed to create conversation");
+        }
       })
       .finally(() => setIsLoading(false));
   }, [data, router]);
@@ -44,7 +51,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
         cursor-pointer
     "
     >
-      <Avatar user={data.userB} /> {/* Assuming the current user is userA */}
+      <Avatar user={data.userB} />
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <div
@@ -62,7 +69,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
                 text-gray-900
             "
             >
-              {data.userB.name} {/* Assuming the current user is userA */}
+              {data.userB.name}
             </p>
           </div>
         </div>
