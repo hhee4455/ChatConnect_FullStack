@@ -14,6 +14,7 @@ const nextConfig = {
       "openapi.naver.com/v1/nid/me",
       "k.kakaocdn.net",
       "res.cloudinary.com",
+      "ssl.pstatic.net",
     ],
   },
 };

@@ -34,6 +34,9 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
       .finally(() => setIsLoading(false));
   }, [data, router]);
 
+  // 현재 사용자가 로그인한 상태에서 userB를 표시하도록 수정
+  const displayUser = data.userB;
+
   return (
     <div
       onClick={handleClick}
@@ -51,7 +54,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
         cursor-pointer
     "
     >
-      <Avatar user={data.userB} />
+      <Avatar user={displayUser} />
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <div
@@ -69,7 +72,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
                 text-gray-900
             "
             >
-              {data.userB.name}
+              {displayUser.name}
             </p>
           </div>
         </div>
