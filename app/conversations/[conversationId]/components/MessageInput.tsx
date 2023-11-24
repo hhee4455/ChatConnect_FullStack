@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 interface MessageInputProps {
-    placeholder?: string;
-    id: string;
-    type?: string;
-    required?: boolean;
-    register:UseFormRegister<FieldValues>
-    errors: FieldErrors
+  placeholder?: string;
+  id: string;
+  type?: string;
+  required?: boolean;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors;
 }
 
-const MessageInput:React.FC<MessageInputProps> = ({
-    placeholder,
-    id,
-    type,
-    required,
-    register,
-    errors
+const MessageInput: React.FC<MessageInputProps> = ({
+  placeholder,
+  id,
+  type,
+  required,
+  register,
+  errors,
 }) => {
-    return ( 
-        <div className="relative w-full">
-                <input 
-                    id={id}
-                    type={type}
-                    autoComplete={id}
-                    {...register(id, { required })}
-                    placeholder={placeholder}
-                    className="
+  return (
+    <div className="relative w-full">
+      <input
+        id={id}
+        type={type}
+        autoComplete={id}
+        {...register(id, { required })}
+        placeholder={placeholder}
+        className="
                         text-black
                         font-light
                         py-2
@@ -37,11 +37,9 @@ const MessageInput:React.FC<MessageInputProps> = ({
                         rounded-full
                         focus:outline-none
                     "
-                />
+      />
+    </div>
+  );
+};
 
-            Message Input!
-        </div>
-     );
-}
- 
 export default MessageInput;

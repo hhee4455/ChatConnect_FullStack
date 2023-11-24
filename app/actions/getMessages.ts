@@ -1,12 +1,10 @@
 import prisma from "@/app/libs/prismadb";
-import ConversationId from "../conversations/[conversationId]/page";
-import { getMaxAge } from "next/dist/server/image-optimizer";
 
-const getMessages = async (ConversationId: string) => {
+const getMessages = async (conversationId: string) => {
   try {
     const messages = await prisma.message.findMany({
       where: {
-        conversationId: ConversationId,
+        conversationId: conversationId,
       },
       include: {
         sender: true,
