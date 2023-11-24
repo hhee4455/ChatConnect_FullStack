@@ -13,7 +13,7 @@ interface MessageBoxPtops {
 }
 
 const MessageBox: React.FC<MessageBoxPtops> = ({
-    data,
+    data, 
     isLast
 }) => {
     const session = useSession();
