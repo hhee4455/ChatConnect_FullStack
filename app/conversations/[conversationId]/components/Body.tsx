@@ -21,8 +21,8 @@ const Body: React.FC<BodyProps> = ({
     const { conversationId } = useConversation();
 
     useEffect(() => {
-        axios.post(`/api/conversations/${conversationId}/seen`)
-    }, [conversationId]);
+        axios.post(`/api/conversations/${conversationId}/seen`);
+      }, [conversationId]);
 
     return (
         <div className="flex-1 overflow-auto">

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -33,7 +33,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             "
           />
         </Transition.Child>
-
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div 
             className="
