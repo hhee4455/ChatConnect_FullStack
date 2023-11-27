@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Modal from "../Modal";
 import Input from "../inputs/input";
 import Image from "next/image";
@@ -25,8 +25,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log(currentUser, '&TEST_CURRENT_USER')
 
   const {
     register,
@@ -93,7 +91,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               />
               <div>
                 <label 
-                  htmlFor="photo" 
                   className="
                     block 
                     text-sm 
