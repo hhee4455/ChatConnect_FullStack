@@ -5,6 +5,7 @@ import { FullFriendshipType } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import Avatar from "@/app/components/Avatar";
+import LoadingModal from "@/app/components/LodingModal";
 
 interface UserBoxProps {
   data: FullFriendshipType;
@@ -28,46 +29,51 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
   }, [data, router]);
 
   return (
-    <div
-      onClick={handleClick}
-      className="
-        w-full
-        relative
-        flex
-        items-center
-        space-x-3
-        bg-white
-        p-3
-        hover:bg-neutral-100
-        rounded-lg
-        transition
-        cursor-pointer
-    "
-    >
-      <Avatar user={data.userB} /> {/* Assuming the current user is userA */}
-      <div className="min-w-0 flex-1">
-        <div className="focus:outline-none">
-          <div
-            className="
-                flex
-                justify-between
-                items-center
-                mb-1
-                "
-          >
-            <p
+    <>
+      {isLoading && (
+        <LoadingModal />
+      )}
+      <div
+        onClick={handleClick}
+        className="
+          w-full
+          relative
+          flex
+          items-center
+          space-x-3
+          bg-white
+          p-3
+          hover:bg-neutral-100
+          rounded-lg
+          transition
+          cursor-pointer
+      "
+      >
+        <Avatar user={data.userB} /> {/* Assuming the current user is userA */}
+        <div className="min-w-0 flex-1">
+          <div className="focus:outline-none">
+            <div
               className="
-                text-sm
-                font-medium
-                text-gray-900
-            "
+                  flex
+                  justify-between
+                  items-center
+                  mb-1
+                  "
             >
-              {data.userB.name} {/* Assuming the current user is userA */}
-            </p>
+              <p
+                className="
+                  text-sm
+                  font-medium
+                  text-gray-900
+              "
+              >
+                {data.userB.name} {/* Assuming the current user is userA */}
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
