@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import Avatar from "@/app/components/Avatar";
-import Modal from "./Modal"; // 가정: Modal 컴포넌트가 존재
+import Modal from "./Modal";
 import { User } from "@prisma/client";
 
 interface UserBoxProps {

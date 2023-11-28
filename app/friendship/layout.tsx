@@ -11,7 +11,7 @@ export default async function FriendshipLayout({
   users: User[];
 }) {
   const friendship = await getFriendships();
-  const users = await getUsers();
+  const users = (await getUsers())!;
   return (
     <Sidebar>
       <div className="h-full">

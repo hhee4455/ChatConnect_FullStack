@@ -11,8 +11,6 @@ interface FriendshipListProps {
   users: User[];
 }
 
-// ...
-
 const FriendshipList: React.FC<FriendshipListProps> = ({
   initialItems,
   users,

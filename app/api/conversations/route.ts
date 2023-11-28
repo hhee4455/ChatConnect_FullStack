@@ -1,5 +1,6 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
+
 import prisma from "@/app/libs/prismadb";
 
 export async function POST(request: Request) {
@@ -9,7 +10,7 @@ export async function POST(request: Request) {
     const { userId, isGroup, members, name } = body;
 
     if (!currentUser?.id || !currentUser?.email) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse("Unauthorized", { status: 400 });
     }
 
     if (isGroup && (!members || members.length < 2 || !name)) {
@@ -36,6 +37,13 @@ export async function POST(request: Request) {
           users: true,
         },
       });
+
+      // Update all connections with new conversation
+      newConversation.users.forEach((user) => {
+        if (user.email) {
+        }
+      });
+
       return NextResponse.json(newConversation);
     }
 
@@ -62,35 +70,15 @@ export async function POST(request: Request) {
       return NextResponse.json(singleConversation);
     }
 
-    // 수정된 부분 시작
-    const userToAdd = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        id: true,
-        name: true,
-        image: true,
-      },
-    });
-
-    if (!userToAdd) {
-      return new NextResponse("User not found", { status: 404 });
-    }
-
     const newConversation = await prisma.conversation.create({
       data: {
         users: {
           connect: [
             {
               id: currentUser.id,
-              name: currentUser.name,
-              image: currentUser.image,
             },
             {
               id: userId,
-              name: userToAdd.name,
-              image: userToAdd.image,
             },
           ],
         },
@@ -100,7 +88,11 @@ export async function POST(request: Request) {
       },
     });
 
-    // 수정된 부분 끝
+    // Update all connections with new conversation
+    newConversation.users.map((user) => {
+      if (user.email) {
+      }
+    });
 
     return NextResponse.json(newConversation);
   } catch (error) {
