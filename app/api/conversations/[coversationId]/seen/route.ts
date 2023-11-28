@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
 import prisma from "@/app/libs/prismadb";
+import { pusherServer } from "@/app/libs/pusher";
 
 interface IParams {
   conversationId?: string;
@@ -65,6 +66,18 @@ export async function POST(
       }
     });
 
+      await pusherServer.trigger(currentUser.email, 'conversation:update', {
+        id: conversationId,
+        message: [updatedMessage]
+      });
+
+      if(lastMessage.seenIds.indexOf(currentUser.id) != -1) {
+        return NextResponse.json(conversation);
+      }
+
+      await pusherServer.trigger(conversationId!, 'message:update', updatedMessage);
+
+      return NextResponse.json(updatedMessage);
     } catch(error: any) {
         console.log(error, 'ERROR_MESSAGES_SEEN');
         return new NextResponse("Internal Error", { status: 500});
