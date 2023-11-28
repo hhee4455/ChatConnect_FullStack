@@ -5,13 +5,33 @@ import { FullFriendshipType } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import Avatar from "@/app/components/Avatar";
+import { User } from "@prisma/client";
 
 interface UserBoxProps {
   data: FullFriendshipType;
+  currentUser: User | null; // 현재 사용자 정보 추가
 }
 
-const UserBox: React.FC<UserBoxProps> = ({ data }) => {
+const UserBox: React.FC<UserBoxProps> = ({ data, currentUser }) => {
   const router = useRouter();
+
+  // currentUser 또는 data가 정의되지 않았을 경우 오류 방지
+  if (!currentUser || !data) {
+    console.error("currentUser or data is undefined.");
+    return null; // 또는 오류 처리에 맞게 반환
+  }
+
+  // data.userA 또는 data.userB가 정의되지 않았을 경우 오류 방지
+  const displayUser =
+    currentUser.id === (data.userA?.id || data.userB?.id)
+      ? data.userB
+      : data.userA;
+
+  if (!displayUser) {
+    console.error("Display user is undefined.");
+    return null; // 또는 오류 처리에 맞게 반환
+  }
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -19,7 +39,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
 
     axios
       .post("/api/conversations", {
-        userId: data.userB.id, // Assuming the current user is userA
+        userId: displayUser.id, // displayUser를 사용
         isGroup: false,
       })
       .then((response) => {
@@ -32,10 +52,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
         }
       })
       .finally(() => setIsLoading(false));
-  }, [data, router]);
-
-  // 현재 사용자가 로그인한 상태에서 userB를 표시하도록 수정
-  const displayUser = data.userB;
+  }, [displayUser, router]);
 
   return (
     <div

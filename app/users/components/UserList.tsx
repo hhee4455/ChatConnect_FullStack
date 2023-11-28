@@ -2,12 +2,14 @@
 
 import { FullFriendshipType } from "@/app/types";
 import UserBox from "./Userbox";
+import { User } from "@prisma/client";
 
 interface UserListProps {
   items: FullFriendshipType[];
+  currentUser: User | null;
 }
 
-const UserList: React.FC<UserListProps> = ({ items }) => {
+const UserList: React.FC<UserListProps> = ({ items, currentUser }) => {
   return (
     <div>
       <aside
@@ -41,7 +43,7 @@ const UserList: React.FC<UserListProps> = ({ items }) => {
             </div>
           </div>
           {items.map((item) => (
-            <UserBox key={item.id} data={item} />
+            <UserBox key={item.id} data={item} currentUser={currentUser} />
           ))}
         </div>
       </aside>
