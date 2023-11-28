@@ -1,16 +1,17 @@
 "use client";
 
-import { User } from "@prisma/client";
 import axios from "axios";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import Modal from "../Modal";
-import Input from "../inputs/Input";
-import Image from "next/image";
+import { User } from "@prisma/client";
 import { CldUploadButton } from "next-cloudinary";
+
+import Input from "../inputs/Input";
+import Modal from "../modals/Modal";
 import Button from "../Button";
+import Image from "next/image";
+import { toast } from "react-hot-toast";
 
 interface SettingsModalProps {
   isOpen?: boolean;
@@ -26,6 +27,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(currentUser, "&TEST_CURRENT_USER");
+
   const {
     register,
     handleSubmit,
@@ -34,7 +37,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: currentUser?.name || "", // 여기에 기본값을 설정해주세요.
+      name: currentUser?.name,
       image: currentUser?.image,
     },
   });
@@ -90,6 +93,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               />
               <div>
                 <label
+                  htmlFor="photo"
                   className="
                     block 
                     text-sm 
@@ -113,7 +117,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                   <CldUploadButton
                     options={{ maxFiles: 1 }}
                     onUpload={handleUpload}
-                    uploadPreset="pgc9ehd5"
+                    uploadPreset="idcigin5"
                   >
                     <Button disabled={isLoading} secondary type="button">
                       Change
@@ -123,6 +127,23 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
             </div>
           </div>
+        </div>
+
+        <div
+          className="
+            mt-6 
+            flex 
+            items-center 
+            justify-end 
+            gap-x-6
+          "
+        >
+          <Button disabled={isLoading} secondary onClick={onClose}>
+            Cancel
+          </Button>
+          <Button disabled={isLoading} type="submit">
+            Save
+          </Button>
         </div>
       </form>
     </Modal>
