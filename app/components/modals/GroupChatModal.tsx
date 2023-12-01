@@ -15,7 +15,7 @@ import { toast } from "react-hot-toast";
 interface GroupChatModalProps {
   isOpen?: boolean;
   onClose: () => void;
-  users: User[];
+  users: User[] | null;
 }
 
 const GroupChatModal: React.FC<GroupChatModalProps> = ({
