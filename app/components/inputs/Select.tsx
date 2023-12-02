@@ -21,35 +21,30 @@ const Select: React.FC<SelectProps> = ({
     <div className="z-[100]">
       <label
         className="
-              block
-              text-sm
-              font-medium
-              leading-6
-              text-gray-900
-          "
+          block 
+          text-sm 
+          font-medium 
+          leading-6 
+          text-gray-900
+        "
       >
         {label}
       </label>
       <div className="mt-2">
-        {options && ( // users가 null이 아닌 경우에만 ReactSelect을 렌더링
-          <ReactSelect
-            isDisabled={disabled}
-            value={value}
-            onChange={onChange}
-            isMulti
-            options={options}
-            menuPortalTarget={document.body}
-            styles={{
-              menuPortal: (base) => ({
-                ...base,
-                zIndex: 9999,
-              }),
-            }}
-            classNames={{
-              control: () => "text-sm",
-            }}
-          />
-        )}
+        <ReactSelect
+          isDisabled={disabled}
+          value={value}
+          onChange={onChange}
+          isMulti
+          options={options}
+          menuPortalTarget={document.body}
+          styles={{
+            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+          }}
+          classNames={{
+            control: () => "text-sm",
+          }}
+        />
       </div>
     </div>
   );

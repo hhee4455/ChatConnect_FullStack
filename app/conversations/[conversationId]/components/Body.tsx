@@ -10,11 +10,11 @@ import { FullMessageType } from "@/app/types";
 import { find } from "lodash";
 
 interface BodyProps {
-  initiaMessages: FullMessageType[];
+  initialMessages: FullMessageType[];
 }
 
-const Body: React.FC<BodyProps> = ({ initiaMessages }) => {
-  const [messages, setMessages] = useState(initiaMessages);
+const Body: React.FC<BodyProps> = ({ initialMessages }) => {
+  const [messages, setMessages] = useState(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const { conversationId } = useConversation();

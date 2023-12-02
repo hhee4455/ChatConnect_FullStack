@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import useRoutes from "@/app/hooks/useRoutes";
 import { useState } from "react";
@@ -19,10 +19,10 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
 
   return (
     <>
-      <SettingsModal 
+      <SettingsModal
         currentUser={currentUser}
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}  
+        onClose={() => setIsOpen(false)}
       />
       <div
         className="

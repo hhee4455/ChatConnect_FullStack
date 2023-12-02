@@ -1,27 +1,27 @@
 "use client";
 
-import Modal from "@/app/components/modals/Modal";
-import Button from "@/app/components/Button";
-
-import Select from "@/app/components/inputs/Select";
-import Input from "@/app/components/inputs/Input";
-import { User } from "@prisma/client";
 import axios from "axios";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { User } from "@prisma/client";
+
+import Input from "../inputs/Input";
+import Select from "../inputs/Select";
+import Modal from "./Modal";
+import Button from "../Button";
 import { toast } from "react-hot-toast";
 
 interface GroupChatModalProps {
   isOpen?: boolean;
   onClose: () => void;
-  users: User[] | null;
+  users: User[];
 }
 
 const GroupChatModal: React.FC<GroupChatModalProps> = ({
   isOpen,
   onClose,
-  users,
+  users = [],
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +53,7 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
         router.refresh();
         onClose();
       })
-      .catch(() => toast.error("Something went wrong"))
+      .catch(() => toast.error("Something went wrong!"))
       .finally(() => setIsLoading(false));
   };
 
@@ -64,39 +64,25 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
           <div className="border-b border-gray-900/10 pb-12">
             <h2
               className="
-                                text-base
-                                font-sembold
-                                leading-7
-                                text-gray-900
-                            "
+                text-base 
+                font-semibold 
+                leading-7 
+                text-gray-900
+              "
             >
-              Crate a group chat
+              Create a group chat
             </h2>
-            <p
-              className="
-                                mt-1
-                                text-sm
-                                leading-6
-                                text-gray-600
-                            "
-            >
+            <p className="mt-1 text-sm leading-6 text-gray-600">
               Create a chat with more than 2 people.
             </p>
-            <div
-              className="
-                                mt-10
-                                flex
-                                flex-col
-                                gap-y-8
-                            "
-            >
+            <div className="mt-10 flex flex-col gap-y-8">
               <Input
-                register={register}
+                disabled={isLoading}
                 label="Name"
                 id="name"
-                disabled={isLoading}
-                required
                 errors={errors}
+                required
+                register={register}
               />
               <Select
                 disabled={isLoading}
@@ -115,15 +101,7 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
             </div>
           </div>
         </div>
-        <div
-          className="
-                        mt-6
-                        flex
-                        items-center
-                        justify-end
-                        gap-x-6
-                    "
-        >
+        <div className="mt-6 flex items-center justify-end gap-x-6">
           <Button
             disabled={isLoading}
             onClick={onClose}
