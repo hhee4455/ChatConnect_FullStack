@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { User } from "@prisma/client";
 
-import Input from "../inputs/Input";
+import Input from "../inputs/input";
 import Select from "../inputs/Select";
 import Modal from "./Modal";
 import Button from "../Button";

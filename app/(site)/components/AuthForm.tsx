@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import Button from "@/app/components/Button"; // 버튼 컴포넌트를 가져옴
-import Input from "@/app/components/inputs/Input"; // 입력 컴포넌트를 가져옴
+import Input from "@/app/components/inputs/input"; // 입력 컴포넌트를 가져옴
 
 import { BsGithub, BsGoogle } from "react-icons/bs"; // React Icons 라이브러리에서 아이콘을 가져옴
 import { RiKakaoTalkFill } from "react-icons/ri";
