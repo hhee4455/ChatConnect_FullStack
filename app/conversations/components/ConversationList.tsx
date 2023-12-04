@@ -16,7 +16,7 @@ import { FullConversationType } from "@/app/types";
 
 interface ConversationListProps {
   initialItems: FullConversationType[];
-  users: User[] | null; // 수정된 부분
+  users: User[]; // 변경된 부분: null을 허용하지 않음
   title?: string;
 }
 
@@ -33,7 +33,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const { conversationId, isOpen } = useConversation();
 
   const pusherKey = useMemo(() => {
-    return session.data?.user?.email || null; // 수정된 부분
+    return session.data?.user?.email || null;
   }, [session.data?.user?.email]);
 
   useEffect(() => {
